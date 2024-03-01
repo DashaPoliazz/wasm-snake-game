@@ -7,4 +7,6 @@ extern crate wee_alloc;
 #[global_allocator]
 static ALLOC: WeeAlloc = WeeAlloc::INIT;
 
+println!("Init");
+
 // wasm-pack build --target web
