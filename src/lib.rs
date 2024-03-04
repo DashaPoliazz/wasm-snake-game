@@ -45,6 +45,12 @@ impl World {
         return self.snake.body[0].0;
     }
 
+    pub fn crawl(&mut self) {
+        let new_position = self.snake_head_idx() + 1;
+        let last_index = self.width * self.width;
+        self.snake.body[0].0 = new_position % last_index;
+    }
+
     fn calc_spawn_index(width: usize) -> usize {
         return (width * width) / 2;
     }

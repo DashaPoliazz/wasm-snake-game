@@ -33,5 +33,35 @@ init().then((_) => {
     ctx.stroke();
   }
 
-  drawWorld();
+  function drawSnake() {
+    const headIdx = world.snake_head_idx();
+    const rowIdx = headIdx % worldWidth;
+    const colIdx = Math.floor(headIdx / worldWidth);
+    console.log(headIdx);
+
+    ctx.beginPath();
+
+    // TODO:
+    // [ ] Fix the spawnIdx
+    ctx.fillRect(rowIdx * CELL_SIZE, colIdx * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+
+    ctx.stroke();
+  }
+
+  function paint() {
+    drawWorld();
+    drawSnake();
+  }
+
+  function update() {
+    setTimeout(() => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      world.crawl();
+      paint();
+      requestAnimationFrame(update);
+    }, 300);
+  }
+
+  paint();
+  update();
 });
