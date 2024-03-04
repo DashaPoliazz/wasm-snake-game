@@ -3,10 +3,51 @@ use wee_alloc::WeeAlloc;
 
 extern crate wee_alloc;
 
-// Using `wee_alloc` as the global allocator.
 #[global_allocator]
 static ALLOC: WeeAlloc = WeeAlloc::INIT;
 
-println!("Init");
+pub struct SnakeCell(usize);
+
+pub struct Snake {
+    body: Vec<SnakeCell>,
+}
+
+impl Snake {
+    pub fn new(spawn_index: usize) -> Self {
+        return Snake {
+            body: vec![SnakeCell(spawn_index)],
+        };
+    }
+}
+
+#[wasm_bindgen]
+pub struct World {
+    width: usize,
+    snake: Snake,
+}
+
+#[wasm_bindgen]
+impl World {
+    pub fn new(width: usize) -> Self {
+        let spawn_index = World::calc_spawn_index(width);
+
+        return World {
+            width,
+            snake: Snake::new(spawn_index),
+        };
+    }
+
+    pub fn width(&self) -> usize {
+        return self.width;
+    }
+
+    pub fn snake_head_idx(&self) -> usize {
+        return self.snake.body[0].0;
+    }
+
+    fn calc_spawn_index(width: usize) -> usize {
+        return (width * width) / 2;
+    }
+}
 
 // wasm-pack build --target web
